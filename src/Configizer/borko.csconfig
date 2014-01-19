@@ -1,0 +1,11 @@
+﻿#base .\base
+
+#import System;
+
+public override string DbUser {get {return "borko_sicuser";}}
+public override string DbPassword {get {return "thepassword";}}
+
+public override void Apply() 
+{
+	Detokenize(".");
+}
