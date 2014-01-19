@@ -1,0 +1,4 @@
+Configizer
+==========
+
+Configuration files management
