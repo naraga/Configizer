@@ -6,6 +6,8 @@ using System.Text;
 
 namespace ConfigizerLib.Compilation
 {
+    //TODO: refactor - most of actual Compile() logic could be extracted to support other implementations
+    // and actual compilation (GetConfigClassCsharpCode or CreateProvider("CSharp") could be isolated)
     public class CsharpConfigurationCompiler : IConfigurationCompiler
     {
         public ConfigurationBase Compile(ConfigurationFileInfo cfgFileInfo)
