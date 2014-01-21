@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConfigizerLib
+namespace ConfigizerLib.Compilation
 {
-    public interface IConfigurationCompiler
-    {
-        ConfigurationBase Compile(ConfigurationFileInfo cfgFileInfo);
-    }
-
     public class CsharpConfigurationCompiler : IConfigurationCompiler
     {
         public ConfigurationBase Compile(ConfigurationFileInfo cfgFileInfo)
@@ -36,6 +31,9 @@ namespace ConfigizerLib
             } while (actualConfig != null);
 
             var results = provider.CompileAssemblyFromSource(cp, csClasses.ToArray());
+            if (results.Errors.HasErrors)
+                throw new ConfigurationCompilationException(cfgFileInfo, results.Errors);
+
             var configTypes = results.CompiledAssembly.GetTypes()
                 .Where(t =>
                     typeof(ConfigurationBase).IsAssignableFrom(t) 

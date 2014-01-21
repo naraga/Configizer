@@ -1,4 +1,5 @@
 ﻿using ConfigizerLib;
+using ConfigizerLib.Compilation;
 
 namespace Configizer
 {
