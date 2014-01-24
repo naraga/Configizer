@@ -7,40 +7,26 @@ namespace ConfigizerLib
 {
     public static class ObjectExtensions
     {
-        public static object GetParamValue(this object o, string paramName)
+        public static object GetParamValue(this object o, string paramName, object defaultValue = null)
         {
             object value;
 
-            var prop = o.GetType().GetProperty(paramName,
-                BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
+                                              BindingFlags.NonPublic | BindingFlags.Public;
+            var prop = o.GetType().GetProperty(paramName, bindingFlags);
             if (prop != null)
                 value = prop.GetValue(o);
             else
             {
-                var field = o.GetType().GetField(paramName,
-                    BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (field != null)
-                    value = field.GetValue(o);
-                else
-                    throw new KeyNotFoundException(paramName);
+                var field = o.GetType().GetField(paramName, bindingFlags);
+                value = field != null ? field.GetValue(o) : defaultValue;
             }
 
-            // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
-            if (value is string)
-                return o.Interpolate((string)value);
+            var s = value as string;
+            if (s != null)
+                return o.Interpolate(s);
 
             return value;
-        }
-
-        public static IEnumerable<string> GetAllParams(this object o)
-        {
-            return
-                o.GetType().GetProperties(BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.NonPublic |
-                                          BindingFlags.Public).Select(p => p.Name)
-                    .Union(
-                        o.GetType()
-                            .GetFields(BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.NonPublic |
-                                       BindingFlags.Public).Select(p => p.Name));
         }
 
         public static string Interpolate(this object source, string s)
@@ -48,13 +34,19 @@ namespace ConfigizerLib
             return Regex.Replace(s, @"\$\{(.+?)\}", delegate(Match match)
             {
                 var paramExpr = match.Groups[1].Value;
-                var paramNameAndFormat = paramExpr.Split(':');
-                var paramValue = source.GetParamValue(paramNameAndFormat[0]);
+                var paramNameAndFormatArr = paramExpr.Split(':');
                 
-                if (paramNameAndFormat.Length == 1)
+                var paramName = paramNameAndFormatArr[0];
+                var paramFormat = string.Join(":", paramNameAndFormatArr.Skip(1));
+                var paramValue = source.GetParamValue(paramName);
+                
+                if(paramValue == null)
+                    throw new KeyNotFoundException(paramName);
+
+                if (paramFormat == string.Empty)
                     return paramValue.ToString();
 
-                var format = "{0:" + string.Join(":", paramNameAndFormat.Skip(1)) + "}";
+                var format = "{0:" + paramFormat + "}";
                 return string.Format(format, paramValue);
             });
         }}
