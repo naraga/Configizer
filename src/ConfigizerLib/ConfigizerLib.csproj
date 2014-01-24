@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compilation\ConfigurationCompilerBase.cs" />
     <Compile Include="ConfigurationBase.cs" />
     <Compile Include="Compilation\ConfigurationCompilationException.cs" />
     <Compile Include="ConfigurationFileInfo.cs" />

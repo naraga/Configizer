@@ -9,6 +9,11 @@ namespace ConfigizerLib
     {
         public static ConfigurationFileInfo Load(string path)
         {
+            const string baseTag = "base";
+            const string importTag = "import";
+            const string referenceTag = "r";
+            var allTags = new[] {baseTag, importTag, referenceTag};
+
             var ext = Path.GetExtension(path) ?? "";
             var dir = Path.GetDirectoryName(path) ?? "";
             var fileName = Path.GetFileName(path) ?? "";
@@ -18,18 +23,18 @@ namespace ConfigizerLib
             {
                 Name = cfgName,
                 Directory = dir,
-                ReferencedAssemblies = GetTagValues(contents, "r").Distinct().ToArray(),
-                NamespaceImports = GetTagValues(contents, "import").Distinct().ToArray(),
+                ReferencedAssemblies = GetTagValues(contents, referenceTag).Distinct().ToArray(),
+                NamespaceImports = GetTagValues(contents, importTag).Distinct().ToArray(),
             };
 
-            var baseTags = GetTagValues(contents, "base");
-            if (baseTags.Count() > 1)
+            var baseConfigs = GetTagValues(contents, baseTag);
+            if (baseConfigs.Count() > 1)
                 throw new Exception("Multiple base configurations specified for " + cfgName);
 
-            if (baseTags.Any())
-                cfi.Base = Load(Path.Combine(dir, baseTags.Single().Trim() + ext));
+            if (baseConfigs.Any())
+                cfi.Base = Load(Path.Combine(dir, baseConfigs.Single() + ext));
 
-            cfi.Contents = RemoveTags(contents, "base", "r", "import");
+            cfi.Contents = RemoveTags(contents, allTags);
 
             return cfi;
         }
@@ -44,7 +49,7 @@ namespace ConfigizerLib
         {
             var tags = Regex.Matches(contents, @"(^#" + tagName + @"\s+(?<val>.*)\s+$)", 
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            return tags.OfType<Match>().Select(m => m.Groups["val"].Value).ToArray();
+            return tags.OfType<Match>().Select(m => m.Groups["val"].Value.Trim()).ToArray();
         }
     }
 }
