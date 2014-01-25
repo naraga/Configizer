@@ -15,7 +15,7 @@ namespace ConfigizerLib.Compilation
         }
 
         protected override string GetCompleteConfigClassCode(string originalContent,
-            string className, string baseClassName, IEnumerable<string> nsImports)
+            string className, string baseClassName, bool @abstract, IEnumerable<string> nsImports)
         {
             var cls = new StringBuilder();
             foreach (var ns in nsImports)
@@ -23,12 +23,18 @@ namespace ConfigizerLib.Compilation
                 cls.AppendFormat("using {0};", ns);
             }
 
-            cls.AppendFormat("public class @{0}:{1} {{",
+            cls.AppendFormat("public {0} class @{1}:{2} {{",
+                @abstract ? "abstract" : "",
                 className,
                 !string.IsNullOrWhiteSpace(baseClassName) ? "@" + baseClassName : "ConfigurationBase");
             cls.Append(originalContent);
             cls.Append("}");
             return cls.ToString();
+        }
+
+        protected override string GetProtectedOverrideStringPropertySnippet(string propertyName, string value)
+        {
+            return string.Format("protected override string {0} {{get{{return \"{1}\";}}}}", propertyName, value);
         }
     }
 }

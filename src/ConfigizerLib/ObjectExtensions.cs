@@ -7,18 +7,34 @@ namespace ConfigizerLib
 {
     public static class ObjectExtensions
     {
+        const BindingFlags ParamsBindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
+                                  BindingFlags.NonPublic | BindingFlags.Public;
+
+        public static void SetParamValue(this object o, string paramName, string value)
+        {
+            var prop = o.GetType().GetProperty(paramName, ParamsBindingFlags);
+            if (prop != null)
+                prop.SetValue(o, value);
+            else
+            {
+                var field = o.GetType().GetField(paramName, ParamsBindingFlags);
+                if (field != null)
+                    field.SetValue(o, value);
+                else
+                    throw new KeyNotFoundException(paramName);
+            }
+        }
+
         public static object GetParamValue(this object o, string paramName, object defaultValue = null)
         {
             object value;
 
-            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
-                                              BindingFlags.NonPublic | BindingFlags.Public;
-            var prop = o.GetType().GetProperty(paramName, bindingFlags);
+            var prop = o.GetType().GetProperty(paramName, ParamsBindingFlags);
             if (prop != null)
                 value = prop.GetValue(o);
             else
             {
-                var field = o.GetType().GetField(paramName, bindingFlags);
+                var field = o.GetType().GetField(paramName, ParamsBindingFlags);
                 value = field != null ? field.GetValue(o) : defaultValue;
             }
 

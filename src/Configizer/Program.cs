@@ -10,7 +10,7 @@ namespace Configizer
         {
             var cfgInfo = ConfigurationLoader.Load("borko.csconfig");
             var compiler = new CsharpConfigurationCompiler();
-            var cfg = compiler.Compile(cfgInfo);
+            var cfg = compiler.Compile(cfgInfo, null);
             cfg.Apply();
         }
     }

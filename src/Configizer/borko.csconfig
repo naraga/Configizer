@@ -3,7 +3,7 @@
 #import System;
 
 public override string DbUser {get {return "borko_sicuser";}}
-public override string DbPassword {get {return "thepassword";}}
+public override string DbPassword {get {throw new Exception("Password not provided");}}
 
 public override void Apply() 
 {
