@@ -23,8 +23,8 @@ namespace ConfigizerLib
             {
                 Name = cfgName,
                 Directory = dir,
-                ReferencedAssemblies = GetTagValues(contents, referenceTag).Distinct().ToArray(),
-                NamespaceImports = GetTagValues(contents, importTag).Distinct().ToArray(),
+                ReferencedAssemblies = GetTagValues(contents, referenceTag).ToArray(),
+                NamespaceImports = GetTagValues(contents, importTag).ToArray(),
             };
 
             var baseConfigs = GetTagValues(contents, baseTag);

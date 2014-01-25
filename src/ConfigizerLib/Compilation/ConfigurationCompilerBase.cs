@@ -14,6 +14,11 @@ namespace ConfigizerLib.Compilation
         protected abstract string GetProtectedOverrideStringPropertySnippet(
             string propertyName, string value);
 
+        private readonly string[] _standardNamespaces =
+        {
+            "System", "ConfigizerLib"
+        };
+
         public ConfigurationBase Compile(ConfigurationFileInfo cfgFileInfo, Dictionary<string, string> overidenParams)
         {
             var provider = GetCodeDomProvider();
@@ -29,13 +34,13 @@ namespace ConfigizerLib.Compilation
             {
                 var baseClassName = actualConfig.Base != null ? actualConfig.Base.Name : null;
                 var @abstract = haveOveridenParams || actualConfig.Name != cfgFileInfo.Name;
-                
+                var nsImports = _standardNamespaces.Union(cfgFileInfo.NamespaceImports).Distinct();
                 classesCode.Add(GetCompleteConfigClassCode(
                     actualConfig.Contents,
                     actualConfig.Name,
                     baseClassName,
                     @abstract, 
-                    new[] {"ConfigizerLib"}));
+                    nsImports));
                 actualConfig = actualConfig.Base;
             } while (actualConfig != null);
 
@@ -53,7 +58,7 @@ namespace ConfigizerLib.Compilation
                         , finalConfigClassName,
                         cfgFileInfo.Name,
                         false,
-                        new[] {"ConfigizerLib"}
+                        _standardNamespaces
                         ));
             }
             else
