@@ -30,5 +30,19 @@ namespace ConfigizerLib.Compilation
         {
             get { return _compilationErrors; }
         }
+
+        public override string Message
+        {
+            get
+            {
+                return string.Format(
+                    @"Compilation errors processing the file {0} or one of its references.{1}",
+                    Configuration.Name,
+                    _compilationErrors.Aggregate(
+                        "",
+                        (acc, e) => string.Format("\n{0}(Line {1}):{2}", acc, e.Line, e.ErrorText))
+                    );
+            }
+        }
     }
 }
