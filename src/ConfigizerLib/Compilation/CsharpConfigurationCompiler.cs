@@ -32,9 +32,9 @@ namespace ConfigizerLib.Compilation
             return cls.ToString();
         }
 
-        protected override string GetProtectedOverrideStringPropertySnippet(string propertyName, string value)
+        protected override string GetPublicOverrideStringPropertySnippet(string propertyName, string value)
         {
-            return string.Format("protected override string {0} {{get{{return \"{1}\";}}}}", propertyName, value);
+            return string.Format("public override string {0} {{get{{return \"{1}\";}}}}", propertyName, value);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ConfigizerLib.Compilation
         protected  abstract string GetCompleteConfigClassCode(string originalContent,
             string className, string baseClassName, bool @abstract, IEnumerable<string> nsImports);
         
-        protected abstract string GetProtectedOverrideStringPropertySnippet(
+        protected abstract string GetPublicOverrideStringPropertySnippet(
             string propertyName, string value);
 
         private readonly string[] _standardNamespaces =
@@ -54,7 +54,7 @@ namespace ConfigizerLib.Compilation
                 classesCode.Add(
                     GetCompleteConfigClassCode(
                         overidenParams.Aggregate("",
-                            (acc, p) => acc + GetProtectedOverrideStringPropertySnippet(p.Key, p.Value))
+                            (acc, p) => acc + GetPublicOverrideStringPropertySnippet(p.Key, p.Value))
                         , finalConfigClassName,
                         cfgFileInfo.Name,
                         false,
