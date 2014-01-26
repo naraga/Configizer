@@ -1,7 +1,11 @@
 ﻿public virtual string DbDataSource {get {return "(local)";}}
-public virtual string DbName {get {return "sic";}}
-public virtual string DbUser {get {return "sicuser";}}
+public virtual string DbName {get {return "sampleapp_db";}}
+public virtual string DbUser {get {return "sampleapp_user";}}
 public virtual string DbPassword {get {return "thepassword";}}
 
 public string DbConnString {get {return "user id=${DbUser};password=${DbPassword};data source=${DbDataSource};initial catalog=${DbName}";}}
 
+public override void Apply()
+{
+	Detokenize("..\\app");
+}

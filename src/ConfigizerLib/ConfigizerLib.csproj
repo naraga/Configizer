@@ -67,6 +67,7 @@
     <Compile Include="Detokenizer\FilesEnumerator.cs" />
     <Compile Include="Detokenizer\TextFilesDetokenizer.cs" />
     <Compile Include="Compilation\IConfigurationCompiler.cs" />
+    <Compile Include="DummyConvertibleToAnything.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

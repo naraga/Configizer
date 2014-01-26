@@ -21,7 +21,7 @@ namespace ConfigizerLib
             var contents = File.ReadAllText(path);
             var cfi = new ConfigurationFileInfo
             {
-                Name = cfgName,
+                Name = cfgName, //TODO: remove all non alpanumeric characters (to be able to build correct clr type names) 
                 Directory = dir,
                 ReferencedAssemblies = GetTagValues(contents, referenceTag).ToArray(),
                 NamespaceImports = GetTagValues(contents, importTag).ToArray(),

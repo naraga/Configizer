@@ -11,31 +11,31 @@ namespace Configizer
         /// Applies conciguration. 
         /// </summary>
         /// <param name="cfgPath">Path to configuration file.</param>
-        /// <param name="overidenParams">List of overiding parameters in format p1=val2;p2=val2;...</param>
-        public static void Apply(string cfgPath, string overidenParams = null)
+        /// <param name="overridenParams">List of overiding parameters in format p1=val2;p2=val2;...</param>
+        public static void Apply(string cfgPath, string[] overridenParams = null)
         {
             var cfgInfo = ConfigurationLoader.Load(cfgPath);
             var compiler = new CsharpConfigurationCompiler();
-            var cfg = compiler.Compile(cfgInfo, GetOveridenParams(overidenParams));
+            var cfg = compiler.Compile(cfgInfo, GetOveridenParams(overridenParams));
             cfg.Apply();
         }
 
-        private static Dictionary<string, string> GetOveridenParams(string overidenParams)
+        //static void Main(string[] args)
+        //{
+        //    var cfgInfo = ConfigurationLoader.Load("..\\..\\..\\Samples\\Sample01\\config\\UAT.csconfig");
+        //    var compiler = new CsharpConfigurationCompiler();
+        //    var cfg = compiler.Compile(cfgInfo, null);
+        //    cfg.Apply();
+        //}
+
+        private static Dictionary<string, string> GetOveridenParams(string[] overidenParams)
         {
-            if (string.IsNullOrWhiteSpace(overidenParams))
+            if (overidenParams == null || !overidenParams.Any())
                 return null;
 
-            return overidenParams.Split(';')
+            return overidenParams
                 .Select(pv=>pv.Split('='))
                 .ToDictionary(pv => pv[0].Trim(), pv=>pv[1].Trim());
-        }
-
-        static void Main(string[] args)
-        {
-            var cfgInfo = ConfigurationLoader.Load("borko.csconfig");
-            var compiler = new CsharpConfigurationCompiler();
-            var cfg = compiler.Compile(cfgInfo, null);
-            cfg.Apply();
         }
     }
 }
