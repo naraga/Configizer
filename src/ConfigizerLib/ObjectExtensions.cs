@@ -10,42 +10,41 @@ namespace ConfigizerLib
         const BindingFlags ParamsBindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
                                   BindingFlags.NonPublic | BindingFlags.Public;
 
-        public static void SetParamValue(this object o, string paramName, string value)
-        {
-            var prop = o.GetType().GetProperty(paramName, ParamsBindingFlags);
-            if (prop != null)
-                prop.SetValue(o, value);
-            else
-            {
-                var field = o.GetType().GetField(paramName, ParamsBindingFlags);
-                if (field != null)
-                    field.SetValue(o, value);
-                else
-                    throw new KeyNotFoundException(paramName);
-            }
-        }
-
         public static object GetParamValue(this object o, string paramName, object defaultValue = null)
         {
             object value;
 
+            // is it property ?
             var prop = o.GetType().GetProperty(paramName, ParamsBindingFlags);
             if (prop != null)
                 value = prop.GetValue(o);
             else
             {
+                // is it field ?
                 var field = o.GetType().GetField(paramName, ParamsBindingFlags);
-                value = field != null ? field.GetValue(o) : defaultValue;
+                if (field != null)
+                {
+                    value = field.GetValue(o);
+                }
+                else
+                {
+                    // not found, do we have default value?
+                    if (defaultValue != null)
+                        value = defaultValue;
+                    else
+                        throw new KeyNotFoundException(paramName);
+                }
             }
-
+            
+            // if value we got is string let's interpolate it
             var s = value as string;
             if (s != null)
-                return o.Interpolate(s);
+                return o.Interpolate(s, defaultValue as string);
 
             return value;
         }
 
-        public static string Interpolate(this object source, string s)
+        public static string Interpolate(this object source, string s, string defaultValue = null)
         {
             return Regex.Replace(s, @"\$\{(.+?)\}", delegate(Match match)
             {
@@ -54,10 +53,7 @@ namespace ConfigizerLib
                 
                 var paramName = paramNameAndFormatArr[0];
                 var paramFormat = string.Join(":", paramNameAndFormatArr.Skip(1));
-                var paramValue = source.GetParamValue(paramName);
-                
-                if(paramValue == null)
-                    throw new KeyNotFoundException(paramName);
+                var paramValue = source.GetParamValue(paramName, defaultValue);
 
                 if (paramFormat == string.Empty)
                     return paramValue.ToString();

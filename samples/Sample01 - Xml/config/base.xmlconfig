@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#lang xml
+-->
+<Configuration>
+  <Parameters>
+    <P Name="DbDataSource" Value="(local)"/>
+	<P Name="DbName" Value="sampleapp_db"/>
+	<P Name="DbUser" Value="sampleapp_user"/>
+	<P Name="DbPassword" Value="thepassword"/>
+	
+	<P Name="DbConnString" Value="user id=${DbUser};password=${DbPassword};data source=${DbDataSource};initial catalog=${DbName}"/>
+  </Parameters>
+  <Actions>
+    <Detokenize Paths="..\app"/>
+  </Actions>
+</Configuration>

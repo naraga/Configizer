@@ -59,6 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compilation\ConfigurationCompilerBase.cs" />
+    <Compile Include="Compilation\Xml\Action.cs" />
+    <Compile Include="Compilation\Xml\ConfigParam.cs" />
+    <Compile Include="Compilation\Xml\ConfigurationDocument.cs" />
+    <Compile Include="Compilation\Xml\XmlConfigurationCompiler.cs" />
     <Compile Include="ConfigurationBase.cs" />
     <Compile Include="Compilation\ConfigurationCompilationException.cs" />
     <Compile Include="ConfigurationFileInfo.cs" />

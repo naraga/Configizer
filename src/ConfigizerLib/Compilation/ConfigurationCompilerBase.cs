@@ -8,9 +8,15 @@ namespace ConfigizerLib.Compilation
     public abstract class ConfigurationCompilerBase : IConfigurationCompiler
     {
         protected abstract CodeDomProvider GetCodeDomProvider();
-        protected  abstract string GetCompleteConfigClassCode(string originalContent,
-            string className, string baseClassName, bool @abstract, IEnumerable<string> nsImports);
-        
+
+        protected abstract string CreateConfigClassCode(string originalContent,
+            string className, string baseClassName, bool @abstract, bool isLeaf,
+            IEnumerable<string> nsImports);
+
+        protected abstract string CreateClassWithOverridingParams(
+            string className, string baseClassName, IEnumerable<string> nsImports,
+            Dictionary<string, string> overidenParams);
+
         protected abstract string GetPublicOverrideStringPropertySnippet(
             string propertyName, string value);
 
@@ -35,34 +41,27 @@ namespace ConfigizerLib.Compilation
                 var baseClassName = actualConfig.Base != null ? actualConfig.Base.Name : null;
                 var @abstract = haveOveridenParams || actualConfig.Name != cfgFileInfo.Name;
                 var nsImports = _standardNamespaces.Union(cfgFileInfo.NamespaceImports).Distinct();
-                classesCode.Add(GetCompleteConfigClassCode(
+                classesCode.Add(CreateConfigClassCode(
                     actualConfig.Contents,
                     actualConfig.Name,
                     baseClassName,
-                    @abstract, 
+                    @abstract, // every non-leaf class is abstract
+                    !@abstract, 
                     nsImports));
                 actualConfig = actualConfig.Base;
             } while (actualConfig != null);
 
-            string finalConfigClassName;
+            string leafConfigClassName;
 
             // overrides configuration with new leaf class which contains string virtual properties
             // (typically sent as commandline arguments to configizer)
             if (haveOveridenParams)
             {
-                finalConfigClassName = "__configizerOveridingClass";
-                classesCode.Add(
-                    GetCompleteConfigClassCode(
-                        overidenParams.Aggregate("",
-                            (acc, p) => acc + GetPublicOverrideStringPropertySnippet(p.Key, p.Value))
-                        , finalConfigClassName,
-                        cfgFileInfo.Name,
-                        false,
-                        _standardNamespaces
-                        ));
+                leafConfigClassName = "__configizerOveridingClass";
+                classesCode.Add(CreateClassWithOverridingParams(leafConfigClassName, cfgFileInfo.Name, _standardNamespaces, overidenParams));
             }
             else
-                finalConfigClassName = cfgFileInfo.Name;
+                leafConfigClassName = cfgFileInfo.Name;
 
             var results = provider.CompileAssemblyFromSource(cp, classesCode.ToArray());
             if (results.Errors.HasErrors)
@@ -73,7 +72,7 @@ namespace ConfigizerLib.Compilation
                     typeof (ConfigurationBase).IsAssignableFrom(t)
                 );
 
-            var cfg = (ConfigurationBase)Activator.CreateInstance(configTypes.Single(c=>c.Name == finalConfigClassName));
+            var cfg = (ConfigurationBase)Activator.CreateInstance(configTypes.Single(c=>c.Name == leafConfigClassName));
             cfg.ConfigDirectory = cfgFileInfo.Directory;
 
             return cfg;

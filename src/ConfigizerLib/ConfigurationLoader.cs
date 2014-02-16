@@ -12,7 +12,9 @@ namespace ConfigizerLib
             const string baseTag = "base";
             const string importTag = "import";
             const string referenceTag = "r";
-            var allTags = new[] {baseTag, importTag, referenceTag};
+            const string langTag = "lang";
+
+            var allTags = new[] {baseTag, importTag, referenceTag, langTag};
 
             var ext = Path.GetExtension(path) ?? "";
             var dir = Path.GetDirectoryName(path) ?? "";
@@ -33,6 +35,14 @@ namespace ConfigizerLib
 
             if (baseConfigs.Any())
                 cfi.Base = Load(Path.Combine(dir, baseConfigs.Single() + ext));
+
+            var lang = GetTagValues(contents, langTag).FirstOrDefault();
+            switch (lang)
+            {
+                case "cs": cfi.Language = ConfigLang.Csharp; break;
+                case "xml": cfi.Language = ConfigLang.Xml; break;
+                default: cfi.Language = ConfigLang.Csharp; break;
+            }
 
             cfi.Contents = RemoveTags(contents, allTags);
 

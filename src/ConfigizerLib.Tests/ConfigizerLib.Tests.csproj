@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CsharpConfigurationCompilerTests.cs" />
     <Compile Include="InterpolationTests.cs" />
+    <Compile Include="GetParamValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

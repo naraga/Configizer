@@ -11,3 +11,4 @@ Add-Type -Path "$dp0\Configizer.dll"
 
 #TODO
 # - nice default algorithm to search for "config" directory  
+

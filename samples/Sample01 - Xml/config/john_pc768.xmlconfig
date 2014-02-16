@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#base .\base
+#lang xml
+-->
+<Configuration>
+  <Parameters>
+	<P Name="DbDataSource" Value="DEVDBSRV01\mssql2012"/>
+	<P Name="DbPassword" Value="thepassword1234"/>
+  </Parameters>
+  <Actions>
+    <Detokenize Paths="..\app"/>
+  </Actions>
+</Configuration>

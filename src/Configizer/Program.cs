@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ConfigizerLib;
 using ConfigizerLib.Compilation;
+using ConfigizerLib.Compilation.Xml;
 
 namespace Configizer
 {
@@ -15,7 +17,18 @@ namespace Configizer
         public static void Apply(string cfgPath, string[] overridenParams = null)
         {
             var cfgInfo = ConfigurationLoader.Load(cfgPath);
-            var compiler = new CsharpConfigurationCompiler();
+            IConfigurationCompiler compiler;
+            switch (cfgInfo.Language)
+            {
+                case ConfigLang.Csharp:
+                    compiler = new CsharpConfigurationCompiler();
+                    break;
+                case ConfigLang.Xml:
+                    compiler = new XmlConfigurationCompiler();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             var cfg = compiler.Compile(cfgInfo, GetOveridenParams(overridenParams));
             cfg.Apply();
         }

@@ -33,7 +33,7 @@ namespace ConfigizerLib.Tests
                     Name = "MyCfg",
                     Contents =
                         @"
-protected abstract string p1{get;}
+public abstract string p1{get;}
 public string p2=""${p1} world!"";"
                 }, new Dictionary<string, string>{{"p1", "hello"}});
             Assert.AreEqual("hello world!", cfg.GetParamValue("p2"));
@@ -47,8 +47,8 @@ public string p2=""${p1} world!"";"
                 Base = null,
                 Name = "BaseCfg",
                 Contents = @"
-protected abstract string Name {get;}
-protected string Greeting {get {return ""hello ${name}!"";}}
+public abstract string Name {get;}
+public string Greeting {get {return ""hello ${name}!"";}}
 "
             };
 
@@ -56,7 +56,7 @@ protected string Greeting {get {return ""hello ${name}!"";}}
             {
                 Base = baseCfgInfo,
                 Name = "MyCfg",
-                Contents = @"protected override string Name {get{return ""World"";}}"
+                Contents = @"public override string Name {get{return ""World"";}}"
             };
             var cfg = _compiler.Compile(
                 myCfgInfo, new Dictionary<string, string>{{"Name", "Boris"}});
