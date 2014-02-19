@@ -10,7 +10,7 @@ namespace Configizer
     public class Program
     {
         /// <summary>
-        /// Applies conciguration. 
+        /// Applies configuration. 
         /// </summary>
         /// <param name="cfgPath">Path to configuration file.</param>
         /// <param name="overridenParams">List of overiding parameters in format p1=val2;p2=val2;...</param>
