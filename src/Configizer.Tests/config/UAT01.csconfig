@@ -1,0 +1,3 @@
+#base .\base
+public override string DbDataSource {get {return "uatdbsrv\\mssql2012";}}
+public override string DbPassword {get {return ThrowNotOverriden();}}
