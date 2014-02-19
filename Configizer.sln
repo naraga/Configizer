@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigizerLib", "src\ConfigizerLib\ConfigizerLib.csproj", "{1B265A46-BDC6-4FC9-9D1F-96AD3DF36C83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigizerLib.Tests", "src\ConfigizerLib.Tests\ConfigizerLib.Tests.csproj", "{CECD038C-9C09-4677-9B22-BA55FB2EE60D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configizer", "src\Configizer\Configizer.csproj", "{67ED5D43-E555-4172-A59D-CFFC42779633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configizer.Tests", "src\Configizer.Tests\Configizer.Tests.csproj", "{9806214E-D011-41B3-8FAB-870C8438A15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,12 @@ Global
 		{67ED5D43-E555-4172-A59D-CFFC42779633}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67ED5D43-E555-4172-A59D-CFFC42779633}.Release|x86.ActiveCfg = Release|x86
 		{67ED5D43-E555-4172-A59D-CFFC42779633}.Release|x86.Build.0 = Release|x86
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9806214E-D011-41B3-8FAB-870C8438A15F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
