@@ -1,0 +1,1 @@
+..\..\src\Configizer\bin\Debug\Configure.ps1 -Name .\config\UAT01.csconfig -Params "DbPassword=secret password"
