@@ -51,13 +51,13 @@ namespace ConfigizerLib
 
         public static string RemoveTags(string contents, params string[] tags)
         {
-            return Regex.Replace(contents, @"(^#(" + string.Join("|", tags) + @")\s+(?<val>.*)\s+$)", "",
+            return Regex.Replace(contents, @"(^#(" + string.Join("|", tags) + @")\s+(?<val>.*)\s*$)", "",
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
         }
 
         public static string[] GetTagValues(string contents, string tagName)
         {
-            var tags = Regex.Matches(contents, @"(^#" + tagName + @"\s+(?<val>.*)\s+$)", 
+            var tags = Regex.Matches(contents, @"(^#" + tagName + @"\s+(?<val>.*)\s*$)", 
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
             return tags.OfType<Match>().Select(m => m.Groups["val"].Value.Trim()).ToArray();
         }
