@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ConfigizerLib
 {
-    public class ConfigurationLoader
+    public static class ConfigurationLoader
     {
         public static ConfigurationFileInfo Load(string path)
         {
@@ -49,13 +49,13 @@ namespace ConfigizerLib
             return cfi;
         }
 
-        private static string RemoveTags(string contents, params string[] tags)
+        public static string RemoveTags(string contents, params string[] tags)
         {
             return Regex.Replace(contents, @"(^#(" + string.Join("|", tags) + @")\s+(?<val>.*)\s+$)", "",
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
         }
 
-        static string[] GetTagValues(string contents, string tagName)
+        public static string[] GetTagValues(string contents, string tagName)
         {
             var tags = Regex.Matches(contents, @"(^#" + tagName + @"\s+(?<val>.*)\s+$)", 
                 RegexOptions.Multiline | RegexOptions.IgnoreCase);
